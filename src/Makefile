@@ -1,3 +1,5 @@
+prefix=/opt/amj
+
 FLAGS=-Wall -g -fPIC
 CPPFLAGS=$(FLAGS)
 
@@ -12,14 +14,14 @@ libamjTime.so: $(AMJTIME_OBJ)
 	$(CPP) -shared -Wl,-soname,$@ -o $@ $^
 
 install: libamjTime.so ../include/amjTime.H
-	mkdir -p /opt/amj/lib
-	mkdir -p /opt/amj/include
-	cp libamjTime.so /opt/amj/lib
-	cp ../include/amjTime.H /opt/amj/include
+	mkdir -p $(prefix)/lib
+	mkdir -p $(prefix)/include
+	cp libamjTime.so $(prefix)/lib
+	cp ../include/amjTime.H $(prefix)/include
 
 uninstall:
-	- rm /opt/amj/lib/libamjTime.so
-	- rm /opt/amj/include/amjTime.H
+	- rm $(prefix)/lib/libamjTime.so
+	- rm $(prefix)/include/amjTime.H
 
 clean:
 	- rm libamjTime.so $(AMJTIME_OBJ)
