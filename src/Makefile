@@ -22,6 +22,8 @@ install: libamjTime.so ../include/amjTime.H
 uninstall:
 	- rm $(prefix)/lib/libamjTime.so
 	- rm $(prefix)/include/amjTime.H
+	- rmdir $(prefix)/lib
+	- rmdir $(prefix)/include
 
 clean:
 	- rm libamjTime.so $(AMJTIME_OBJ)
