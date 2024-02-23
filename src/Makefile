@@ -1,4 +1,6 @@
-prefix=/opt/amj
+ifndef prefix
+	prefix=/opt/amj
+endif
 
 FLAGS=-Wall -g -fPIC
 CPPFLAGS=$(FLAGS)
