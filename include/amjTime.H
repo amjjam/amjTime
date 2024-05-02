@@ -11,6 +11,7 @@ public:
 				  _se(se),_ns(ns){};
   ~amjTime(){};
   const amjTime &now();
+  const struct timespec &toTimespec(); // s and ns
   int size() const {return sizeof(uint16_t)+5*sizeof(uint8_t)+sizeof(int32_t);};
   int write(uint8_t *) const ;
   int read(const uint8_t *);
@@ -25,6 +26,9 @@ private:
   int16_t _yr;
   uint8_t _mo,_dy,_hr,_mn,_se;
   int32_t _ns;
+  struct timespec _ts;
 };
+
+
 
 #endif
