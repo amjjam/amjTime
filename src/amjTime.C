@@ -1,7 +1,6 @@
 #include "../include/amjTime.H"
 
 #include <cstring>
-#include <time.h>
 
 int amjTime::write(uint8_t *d) const{
   uint8_t *dd=(uint8_t *)memcpy(d,&_yr,sizeof(uint16_t))+sizeof(uint16_t);
@@ -46,3 +45,10 @@ const amjTime &amjTime::now(){
   _ns=t.tv_nsec;
   return *this;
 }
+
+const struct timespec &amjTime::toTimespec(){
+  struct tm tmp={_se,_mn,_hr,_dy,_yr-1900,0,0,0};
+  _ts.tv_sec=mktime(&tmp);
+  _ts.tv_nsec=_ns;
+  return _ts;
+};
