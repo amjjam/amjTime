@@ -2,6 +2,7 @@
 #define _AMJTIME_H_
 
 #include <stdint.h>
+#include <time.h>
 
 class amjTime{
 public:
