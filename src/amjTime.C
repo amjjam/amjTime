@@ -52,3 +52,9 @@ const struct timespec &amjTime::toTimespec(){
   _ts.tv_nsec=_ns;
   return _ts;
 };
+
+double amjTime::operator-(amjTime &tm){
+  toTimespec();
+  struct timespec ts=tm.toTimespec();
+  return (_ts.tv_sec-ts.tv_sec+(double)(_ts.tv_nsec-ts.tv_nsec)/1e9);
+}
