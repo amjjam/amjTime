@@ -34,6 +34,17 @@ int amjTime::read(const uint8_t *d){
 const amjTime &amjTime::now(){
   struct timespec t;
   clock_gettime(CLOCK_REALTIME,&t);
+  return fromTimespec(t);
+}
+
+const struct timespec &amjTime::toTimespec(){
+  struct tm tmp={_se,_mn,_hr,_dy,_yr-1900,0,0,0};
+  _ts.tv_sec=mktime(&tmp);
+  _ts.tv_nsec=_ns;
+  return _ts;
+};
+
+const amjTime &amjTime::fromTimespec(const struct timespec &t){
   struct tm utc;
   gmtime_r(&t.tv_sec,&utc);
   _yr=utc.tm_year+1900;
@@ -45,13 +56,6 @@ const amjTime &amjTime::now(){
   _ns=t.tv_nsec;
   return *this;
 }
-
-const struct timespec &amjTime::toTimespec(){
-  struct tm tmp={_se,_mn,_hr,_dy,_yr-1900,0,0,0};
-  _ts.tv_sec=mktime(&tmp);
-  _ts.tv_nsec=_ns;
-  return _ts;
-};
 
 double amjTime::operator-(amjTime &tm){
   toTimespec();

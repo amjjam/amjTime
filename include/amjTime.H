@@ -13,6 +13,7 @@ public:
   ~amjTime(){};
   const amjTime &now();
   const struct timespec &toTimespec(); // s and ns
+  const amjTime &fromTimespec(const struct timespec &); // s and ns
   double operator-(amjTime &);
   int size() const {return sizeof(uint16_t)+5*sizeof(uint8_t)+sizeof(int32_t);};
   int write(uint8_t *) const ;
