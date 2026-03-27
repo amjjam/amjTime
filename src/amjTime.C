@@ -63,7 +63,7 @@ double amjTime::operator-(amjTime &tm){
   return (_ts.tv_sec-ts.tv_sec+(double)(_ts.tv_nsec-ts.tv_nsec)/1e9);
 }
 
-amjTime amjTime::Now() const{
+amjTime amjTime::Now(){
   amjTime t;
   t.now();
   return t;

@@ -25,7 +25,7 @@ public:
   uint8_t mn() const {return _mn;}
   uint8_t se() const {return _se;}
   int32_t ns() const {return _ns;}
-  static amjTime Now() const;
+  static amjTime Now();
 private:
   int16_t _yr;
   uint8_t _mo,_dy,_hr,_mn,_se;
