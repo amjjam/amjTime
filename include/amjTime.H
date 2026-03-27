@@ -18,14 +18,14 @@ public:
   int size() const {return sizeof(uint16_t)+5*sizeof(uint8_t)+sizeof(int32_t);};
   int write(uint8_t *) const ;
   int read(const uint8_t *);
-  int16_t yr(){return _yr;}
-  uint8_t mo(){return _mo;}
-  uint8_t dy(){return _dy;}
-  uint8_t hr(){return _hr;}
-  uint8_t mn(){return _mn;}
-  uint8_t se(){return _se;}
-  int32_t ns(){return _ns;}
-  static amjTime Now();
+  int16_t yr() const {return _yr;}
+  uint8_t mo() const {return _mo;}
+  uint8_t dy() const {return _dy;}
+  uint8_t hr() const {return _hr;}
+  uint8_t mn() const {return _mn;}
+  uint8_t se() const {return _se;}
+  int32_t ns() const {return _ns;}
+  static amjTime Now() const;
 private:
   int16_t _yr;
   uint8_t _mo,_dy,_hr,_mn,_se;
