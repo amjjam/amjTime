@@ -28,23 +28,16 @@ int amjTime::read(const uint8_t *d){
   dd+=sizeof(uint8_t);
   memcpy(&_ns,dd,sizeof(int32_t));
   dd+=sizeof(int32_t);
+  updateTimespec();
   return size();
 }
 
 const amjTime &amjTime::now(){
-  struct timespec t;
-  clock_gettime(CLOCK_REALTIME,&t);
-  return fromTimespec(t);
+  clock_gettime(CLOCK_REALTIME,&_ts);
+  return fromTimespec(_ts);
 }
 
-const struct timespec &amjTime::toTimespec(){
-  struct tm tmp={_se,_mn,_hr,_dy,_yr-1900,0,0,0};
-  _ts.tv_sec=mktime(&tmp);
-  _ts.tv_nsec=_ns;
-  return _ts;
-};
-
-const amjTime &amjTime::fromTimespec(const struct timespec &t){
+amjTime &amjTime::fromTimespec(const struct timespec &t){
   struct tm utc;
   gmtime_r(&t.tv_sec,&utc);
   _yr=utc.tm_year+1900;
@@ -54,17 +47,50 @@ const amjTime &amjTime::fromTimespec(const struct timespec &t){
   _mn=utc.tm_min;
   _se=utc.tm_sec;
   _ns=t.tv_nsec;
+  _ts=t;
   return *this;
 }
 
-double amjTime::operator-(amjTime &tm){
-  toTimespec();
-  struct timespec ts=tm.toTimespec();
-  return (_ts.tv_sec-ts.tv_sec+(double)(_ts.tv_nsec-ts.tv_nsec)/1e9);
+amjTime amjTime::operator+(double s) const {
+  amjTime t = *this;
+  t += s;
+  return t;
+}
+
+double amjTime::operator-(const amjTime &tm) const{
+  return (_ts.tv_sec-tm._ts.tv_sec+(double)(_ts.tv_nsec-tm._ts.tv_nsec)/1e9);
+}
+
+amjTime &amjTime::operator+=(double s){
+  long is=(long)s;
+  _ts.tv_sec+=is;
+  _ts.tv_nsec+=(long)((s-is)*1e9);
+  if(_ts.tv_nsec>=1000000000L){
+    _ts.tv_sec++;
+    _ts.tv_nsec-=1000000000L;
+  }
+  else if(_ts.tv_nsec<0){
+    _ts.tv_sec--;
+    _ts.tv_nsec+=1000000000L;
+  }
+  return fromTimespec(_ts);
 }
 
 amjTime amjTime::Now(){
   amjTime t;
   t.now();
   return t;
+}
+
+void amjTime::updateTimespec(){
+  struct tm tmp = {};
+  tmp.tm_year = _yr - 1900;
+  tmp.tm_mon  = _mo - 1;
+  tmp.tm_mday = _dy;
+  tmp.tm_hour = _hr;
+  tmp.tm_min  = _mn;
+  tmp.tm_sec  = _se;
+
+  _ts.tv_sec  = timegm(&tmp);
+  _ts.tv_nsec = _ns;
 }
